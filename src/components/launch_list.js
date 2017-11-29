@@ -1,24 +1,45 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
-import _ from 'lodash';
+import { Collapse, Button, CardBody, Card } from 'reactstrap';
+import update from 'immutability-helper';
 
 import { fetchRockets } from '../actions';
+
 class LaunchList extends Component {
+  constructor(props) {
+    super(props);
+    this.collapse = {};
+    this.state = {
+      collapse: {}
+    };
+  }
+
+  toggle(id){
+    this.setState({collapse: Object.assign({id: !this.state.collapse[id]}, this.state.collapse)});
+    console.log(this.state);
+  }
 
   componentDidMount() {
     this.props.fetchRockets();
+    console.log(this.props.rockets);
+    this.props.rockets.map(rocket => {
+      this.collapse[rocket.id] = false;
+    })
+    this.setState({collapse: this.collapse});
   }
 
   renderRockets() {
-    return _.map(this.props.rockets, rocket => {
+    return this.props.rockets.map(rocket => {
       return (
         <div key={rocket.id}>
-          <a data-toggle='collapse' href={'#' + rocket.id} aria-expanded='false' aria-controls={rocket.id}>{rocket.name}</a>
-          <div className='collapse multi-collapse' id={rocket.id}>
-            <div className='card card-body'>
-              {rocket.location.pads.name}
-            </div>
-          </div>
+          <a onClick={() => this.toggle(rocket.id)}>{rocket.name}</a>
+          <Collapse isOpen={this.state.collapse[rocket.id]}>
+            <Card>
+              <CardBody>
+                {rocket.location.pads.name}
+              </CardBody>
+            </Card>
+          </Collapse>
         </div>
       )
     });
