@@ -3,12 +3,11 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import { BrowserRouter, Route } from 'react-router-dom';
-
 import promise from 'redux-promise';
+import 'bootstrap/dist/css/bootstrap.css'
 
 import reducers from './reducers';
-import LaunchList from './components/launch_list';
-
+import App from './components/app';
 import './index.css';
 import registerServiceWorker from './registerServiceWorker';
 
@@ -18,7 +17,7 @@ ReactDOM.render(
   <Provider store={createStoreWithMiddleware(reducers)}>
     <BrowserRouter>
       <div>
-        <Route path='/' component={LaunchList} />
+        <Route path='/' component={App} />
       </div>
     </BrowserRouter>
   </Provider>, 
